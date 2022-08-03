@@ -5,7 +5,7 @@
 -- Dumped from database version 14.3
 -- Dumped by pg_dump version 14.3
 
--- Started on 2022-08-03 20:38:47
+-- Started on 2022-08-03 20:55:12
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -177,7 +177,9 @@ CREATE TABLE public.products (
     photo character varying,
     description text,
     rating integer,
-    seller_id character varying
+    seller_id character varying,
+    brand character varying,
+    chategory character varying
 );
 
 
@@ -432,7 +434,7 @@ COPY public.chats (id, seller_id, costumer_id, chat) FROM stdin;
 -- Data for Name: products; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.products (id, name_product, price, stock, conditon, size, color, photo, description, rating, seller_id) FROM stdin;
+COPY public.products (id, name_product, price, stock, conditon, size, color, photo, description, rating, seller_id, brand, chategory) FROM stdin;
 \.
 
 
@@ -586,7 +588,7 @@ SELECT pg_catalog.setval('public.users_costumer_id_seq', 1, false);
 SELECT pg_catalog.setval('public.users_seller_id_seq', 1, false);
 
 
--- Completed on 2022-08-03 20:38:47
+-- Completed on 2022-08-03 20:55:12
 
 --
 -- PostgreSQL database dump complete
