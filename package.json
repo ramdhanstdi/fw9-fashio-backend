@@ -1,7 +1,6 @@
 {
   "name": "fw9-fashio-backend",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,5 +10,14 @@
   "license": "ISC",
   "dependencies": {
     "node": "^18.7.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ramdhanstdi/fw9-fashio-backend.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ramdhanstdi/fw9-fashio-backend/issues"
+  },
+  "homepage": "https://github.com/ramdhanstdi/fw9-fashio-backend#readme",
+  "description": ""
 }
