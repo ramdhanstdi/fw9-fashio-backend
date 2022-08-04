@@ -1,27 +1,27 @@
 const response = (res, msg, results, infoPage, status=200) => {
-    let success = true;
+  let success = true;
   
-    if(status >= 400){
-      success = false;
-    }
+  if(status >= 400){
+    success = false;
+  }
     
-    const data ={
-      success,
-      message: msg,
-    };
-  
-    if(infoPage){
-      data.infoPage = pageInfo;
-    }
-     
-    if(results){
-      data.result = results;
-    }
-  
-  
-    return res.status(status).json(data);
+  const data ={
+    success,
+    message: msg,
   };
   
-  module.exports = response;
+  if(infoPage){
+    data.infoPage = infoPage;
+  }
+     
+  if(results){
+    data.result = results;
+  }
+  
+  
+  return res.status(status).json(data);
+};
+  
+module.exports = response;
   
   
