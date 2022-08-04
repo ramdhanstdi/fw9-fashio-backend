@@ -3,8 +3,8 @@ const userCostumerModel = require('../models/usersCostumer');
 const { validationResult } = require('express-validator');
 const errResponse = require('../helpers/errorResponse');
 
-
 exports.createUserCostumer = (req, res)=>{
+  //console.log();
    const valdation = validationResult(req);
     if(!valdation.isEmpty()){
       return response(res, 'Error occurd', valdation.array(), null, 400);

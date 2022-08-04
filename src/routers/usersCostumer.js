@@ -41,6 +41,6 @@ usersCostumer.patch('/:id', ...editUserValidator, userCostumerController.updateU
 usersCostumer.delete('/:id', userCostumerController.deleteUserCostumer);
 usersCostumer.get('/:id', userCostumerController.detailUserCostumer);
 //usersCostumer.get('/', body('limit').toInt(), body('page').toInt(),userController.getAllUsers);
-
+//console.log();
 
 module.exports = usersCostumer ;

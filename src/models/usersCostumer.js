@@ -76,6 +76,7 @@ exports.deleteUserCostumer = (id, cb) => {
     cb(err, res.rows);
   });
 };
+//console.log();
 
 exports.detailUserCostumer = (id, cb) => {
   const quer = 'SELECT * FROM users_costumer WHERE id=$1';
