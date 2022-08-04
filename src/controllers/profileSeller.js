@@ -1,28 +1,27 @@
-const { createUsersSellerModel, listUsersSellerModel, countUsersSellerModel, getDetailUsersSellerModel, editUsersSellerModel, deleteUsersSellerModel }= require('../models/usersSeller');
+const { createProfileSellerModel, listProfileSellerModel, countProfileSellerModel, getDetailProfileSellerModel, editProfileSellerModel, deleteProfileSellerModel } = require('../models/profileSeller');
 const errorResponse = require('../helpers/errorResponse');
 const response = require('../helpers/standardResponse');
 const {LIMIT_DATA } = process.env;
 
-exports.createUsersSeller=(req,res)=>{
-  createUsersSellerModel(req.body,(err,result)=>{
+exports.createProfileSeller = (req,res) => {
+  createProfileSellerModel(req.body,(err,result)=>{
     if(err){
       return errorResponse(err,res);
-    }else{
-      return response(res,'Create Success',result.rows[0]);
     }
+    return response(res, 'Crete Profile Successs', result.rows[0]);
   });
 };
 
-exports.getUsersSeller = (req,res) => {
-  const {searchBy='username',search='',method='ASC',limit=parseInt(LIMIT_DATA), page=1} = req.query;
+exports.getProfileSeller = (req,res) => {
+  const {searchBy='store_name',search='',method='ASC',limit=parseInt(LIMIT_DATA), page=1} = req.query;
   const offset = (page-1) * limit;
 
-  listUsersSellerModel(searchBy, search, method, limit, offset,(err,result)=>{
+  listProfileSellerModel(searchBy, search, method, limit, offset,(err,result)=>{
     if(err){
       return errorResponse(err,res);
     }
     const pageInfo = {};
-    countUsersSellerModel(searchBy,search,(err,totalusers)=>{
+    countProfileSellerModel(searchBy,search,(err,totalusers)=>{
       pageInfo.totalData = totalusers;
       pageInfo.totalPage = Math.ceil(totalusers/limit);
       pageInfo.curretPage = parseInt(page);
@@ -33,11 +32,11 @@ exports.getUsersSeller = (req,res) => {
   });
 };
 
-exports.getDetailUsersSeller = (req,res) => {
+exports.getDetailProfileSeller = (req,res) => {
   const getId = req.params.id;  
   console.log(getId);
   if(getId){
-    getDetailUsersSellerModel(getId,(err,result)=>{
+    getDetailProfileSellerModel(getId,(err,result)=>{
       console.log(result);
       if(err){
         return errorResponse(err,res);
@@ -51,8 +50,8 @@ exports.getDetailUsersSeller = (req,res) => {
   }
 };
 
-exports.editUsersSeller = (req,res) => {
-  editUsersSellerModel(req.params.id,req.body,(err,result)=>{
+exports.editProfileSeller = (req,res) => {
+  editProfileSellerModel(req.params.id,req.body,(err,result)=>{
     if (err) {
       return errorResponse(err,res);
     }
@@ -64,7 +63,7 @@ exports.editUsersSeller = (req,res) => {
 };
 
 exports.deleteUsersSeller = (req,res) => {
-  deleteUsersSellerModel(req.params.id,(err,result)=>{
+  deleteProfileSellerModel(req.params.id,(err,result)=>{
     if(err){
       return errorResponse(err,res);
     }
