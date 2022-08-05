@@ -10,7 +10,7 @@ const response = (res, msg, results, pageInfo, status=200) => {
       message: msg,
     };
   
-    if(infoPage){
+    if(pageInfo){
       data.pageInfo = pageInfo;
     }
      
