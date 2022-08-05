@@ -17,6 +17,21 @@ const errorResponse = (err, res) => {
     const eres = handlingErr('Username already exist', 'username');
     return response(res, 'Error', eres, null, 400);
   }
+
+  // rating
+  if (err.code === '23503' && err.detail.includes('seller_id')) {
+    const eres = handlingErr('seller not exist', 'seller_id');
+    return response(res, 'Error', eres, null, 400);
+  }
+  if (err.code === '23503' && err.detail.includes('product_id')) {
+    const eres = handlingErr('product not exist', 'product_id');
+    return response(res, 'Error', eres, null, 400);
+  }
+  if (err.code === '23503' && err.detail.includes('costumer_id')) {
+    const eres = handlingErr('product not exist', 'costumer_id');
+    return response(res, 'Error', eres, null, 400);
+  }
+  // rating
   const eres = handlingErr();
   if(eres == null){
     return response(res, 'Error', null, null, 400);  
