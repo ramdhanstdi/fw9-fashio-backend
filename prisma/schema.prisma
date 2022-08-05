@@ -1,0 +1,179 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model address_costumer {
+  id              Int             @default(autoincrement())
+  recepient_name  String?         @db.VarChar
+  recepient_phone String?         @db.VarChar
+  address         String?
+  city            String?         @db.VarChar
+  postal_code     Int?
+  primary_address Boolean?
+  place_name      String?         @db.VarChar
+  costumer_id     Int?
+  users_costumer  users_costumer? @relation(fields: [costumer_id], references: [id], onDelete: Cascade, map: "address_costumer_fk")
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model bag {
+  id             Int             @default(autoincrement())
+  seller_id      Int?
+  product_id     Int?
+  details        String?         @db.VarChar
+  user_id        Int?
+  users_costumer users_costumer? @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "bag_fk")
+  users_seller   users_seller?   @relation(fields: [seller_id], references: [id], onDelete: Cascade, map: "bag_fk_1")
+  products       products?       @relation(fields: [product_id], references: [id], onDelete: Cascade, map: "bag_fk_2")
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model chats {
+  id             Int             @default(autoincrement())
+  seller_id      Int?
+  costumer_id    Int?
+  chat           String?         @db.VarChar
+  users_costumer users_costumer? @relation(fields: [costumer_id], references: [id], onDelete: Cascade, map: "chats_fk")
+  users_seller   users_seller?   @relation(fields: [seller_id], references: [id], onDelete: Cascade, map: "chats_fk_1")
+
+  @@ignore
+}
+
+model products {
+  id                      Int            @id(map: "products_id") @default(autoincrement())
+  name_product            String?        @db.VarChar
+  price                   Decimal?       @db.Decimal
+  conditon                String?        @db.VarChar
+  photo                   String?        @db.VarChar
+  description             String?
+  rating                  Int?
+  seller_id               String?        @db.VarChar
+  bag                     bag[]          @ignore
+  rating_productsTorating rating[]       @ignore
+  transactions            transactions[] @ignore
+  variant                 variant[]
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model profile_costumer {
+  id             Int            @default(autoincrement())
+  full_name      String?        @db.VarChar
+  picture        String?        @db.VarChar
+  phone          String?        @db.VarChar
+  gender         String?        @db.VarChar
+  birth_date     DateTime?      @db.Date
+  costumer_id    Int
+  users_costumer users_costumer @relation(fields: [costumer_id], references: [id], onDelete: Cascade, map: "profile_costumer_fk")
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model profile_store {
+  id           Int           @default(autoincrement())
+  store_name   String?       @db.VarChar
+  email        String?       @db.VarChar
+  phone        String?       @db.VarChar
+  description  String?
+  photo        String?       @db.VarChar
+  seller_id    Int?
+  users_seller users_seller? @relation(fields: [seller_id], references: [id], onDelete: Cascade, map: "profile_store_fk")
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model rating {
+  id             Int             @default(autoincrement())
+  produck_id     Int?
+  seller_id      Int?
+  photo          String?         @db.VarChar
+  review         String?
+  rating         Int?
+  costumer_id    Int?
+  users_seller   users_seller?   @relation(fields: [seller_id], references: [id], onDelete: Cascade, map: "rating_fk")
+  users_costumer users_costumer? @relation(fields: [costumer_id], references: [id], onDelete: Cascade, map: "rating_fk_1")
+  products       products?       @relation(fields: [produck_id], references: [id], onDelete: Cascade, map: "rating_fk_2")
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model size {
+  id         Int      @default(autoincrement())
+  name       String?  @db.VarChar
+  stock      Int?
+  variant_id Int?
+  variant    variant? @relation(fields: [variant_id], references: [id], onDelete: Cascade, map: "size_fk")
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model transactions {
+  id              Int             @default(autoincrement())
+  status          String?         @db.VarChar
+  order_number    String?         @db.VarChar
+  tracking_number String?         @db.VarChar
+  quantity        Int?
+  total_amount    Decimal?        @db.Decimal
+  payment_method  String?         @db.VarChar
+  product_id      Int?
+  details         String?         @db.VarChar
+  seller_id       Int?
+  costumer_id     Int?
+  users_costumer  users_costumer? @relation(fields: [costumer_id], references: [id], onDelete: Cascade, map: "transactions_fk")
+  users_seller    users_seller?   @relation(fields: [seller_id], references: [id], onDelete: Cascade, map: "transactions_fk_1")
+  products        products?       @relation(fields: [product_id], references: [id], onDelete: Cascade, map: "transactions_fk_2")
+
+  @@ignore
+}
+
+model users_costumer {
+  id               Int                @id(map: "users_costumer_id") @default(autoincrement())
+  username         String             @db.VarChar
+  email            String             @db.VarChar
+  password         String             @db.VarChar
+  address_costumer address_costumer[] @ignore
+  bag              bag[]              @ignore
+  chats            chats[]            @ignore
+  profile_costumer profile_costumer[] @ignore
+  rating           rating[]           @ignore
+  transactions     transactions[]     @ignore
+
+  @@unique([username, email, password], map: "users_costumer_unique")
+}
+
+model users_seller {
+  id            Int             @id(map: "users_seller_id") @default(autoincrement())
+  username      String?         @db.VarChar
+  email         String?         @db.VarChar
+  password      String?         @db.VarChar
+  phone         String?         @db.VarChar
+  store_name    String?         @db.VarChar
+  bag           bag[]           @ignore
+  chats         chats[]         @ignore
+  profile_store profile_store[] @ignore
+  rating        rating[]        @ignore
+  transactions  transactions[]  @ignore
+
+  @@unique([username, email, password, phone, store_name], map: "users_seller_unique")
+}
+
+model variant {
+  id         Int       @id(map: "variant_id") @default(autoincrement())
+  color      String?   @db.VarChar
+  product_id Int?
+  products   products? @relation(fields: [product_id], references: [id], onDelete: Cascade, map: "variant_fk")
+  size       size[]    @ignore
+}
