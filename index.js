@@ -18,7 +18,7 @@ app.get('/',(req,res)=>{
   });
 });
 
-app.use('/',require('./src/routes'));
+app.use('/',require('./src/routers'));
 
 app.use('*',(req, res)=>{
   return res.status(404).json({
