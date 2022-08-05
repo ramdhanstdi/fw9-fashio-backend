@@ -1,5 +1,5 @@
 const response = (res, msg, results, pageInfo, status=200) => {
-    let success = true;
+  let success = true;
 
   if(status >= 400){
     success = false;
@@ -10,9 +10,9 @@ const response = (res, msg, results, pageInfo, status=200) => {
     message: msg,
   };
 
-    if(pageInfo){
-      data.pageInfo = pageInfo;
-    }
+  if(pageInfo){
+    data.pageInfo = pageInfo;
+  }
      
   if(results){
     data.result = results;

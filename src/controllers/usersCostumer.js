@@ -5,27 +5,27 @@ const errResponse = require('../helpers/errorResponse');
 
 exports.createUserCostumer = (req, res)=>{
   //console.log();
-   const valdation = validationResult(req);
-    if(!valdation.isEmpty()){
-      return response(res, 'Error occurd', valdation.array(), null, 400);
-    }
-    userCostumerModel.createUserCostumer(req.body, (err, results)=>{
+  const valdation = validationResult(req);
+  if(!valdation.isEmpty()){
+    return response(res, 'Error occurd', valdation.array(), null, 400);
+  }
+  userCostumerModel.createUserCostumer(req.body, (err, results)=>{
       
-      if (err) {
-        return errResponse(err, res);
-      }else{
-        return response(res, 'Create User Costumer Successfully', results);
-      }
-    });
-  };
+    if (err) {
+      return errResponse(err, res);
+    }else{
+      return response(res, 'Create User Costumer Successfully', results);
+    }
+  });
+};
 
 const {DATA_LIMIT} = process.env; //default data limit 5
 
 exports.getAllUserCostumer = (req, res)=>{
-const {searchBy='username', search ='', limit=parseInt(DATA_LIMIT), page=1, orderBy ='id', sortType='ASC' } = req.query;
-const offset = (page-1) * limit;
+  const {searchBy='username', search ='', limit=parseInt(DATA_LIMIT), page=1, orderBy ='id', sortType='ASC' } = req.query;
+  const offset = (page-1) * limit;
 
-userCostumerModel.getAllUserCostumer(searchBy, search, limit, offset, orderBy, sortType, (err, results)=>{
+  userCostumerModel.getAllUserCostumer(searchBy, search, limit, offset, orderBy, sortType, (err, results)=>{
     if(results.length < 1){
       return res.redirect('/404');
     }else{
@@ -51,7 +51,7 @@ exports.updateUserCostumer = (req, res)=>{
     return response(res, 'Error occurd', valdation.array(), 400);
   }
   userCostumerModel.updateUserCostumer(id, req.body, (err, results)=>{
-     if(results.length > 0 ){
+    if(results.length > 0 ){
       if(err) {
         return errResponse(err, res);
       } else {
@@ -66,7 +66,7 @@ exports.updateUserCostumer = (req, res)=>{
 exports.deleteUserCostumer = (req, res)=>{
   const {id} =req.params;
   userCostumerModel.deleteUserCostumer(id, (err, results)=>{
-     if(results.length > 0){
+    if(results.length > 0){
       return response(res, 'Delete Users Costumer success', results);
     }else{
       return res.redirect('/404');

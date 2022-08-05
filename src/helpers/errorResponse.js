@@ -17,7 +17,7 @@ const errorResponse = (err, res) => {
     const eres = handlingErr('Username already exist', 'username');
     return response(res, 'Error', eres, null, 400);
   }
-const eres = handlingErr();
+  const eres = handlingErr();
   if(eres == null){
     return response(res, 'Error', null, null, 400);  
   }

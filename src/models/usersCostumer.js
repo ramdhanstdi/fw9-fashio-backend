@@ -1,40 +1,40 @@
 const db = require('../helpers/db');
 
 exports.createUserCostumer = (data, cb)=>{
-    const quer = 'INSERT INTO users_costumer(username, email, password) VALUES ($1, $2, $3) RETURNING *';
-    const value = [data.username, data.email, data.password];
-    db.query(quer, value, (err, res)=>{
-      if(res) {
-        cb(err, res.rows);
-      }else{
-        cb(err);
-      }
-    });
-  };
+  const quer = 'INSERT INTO users_costumer(username, email, password) VALUES ($1, $2, $3) RETURNING *';
+  const value = [data.username, data.email, data.password];
+  db.query(quer, value, (err, res)=>{
+    if(res) {
+      cb(err, res.rows);
+    }else{
+      cb(err);
+    }
+  });
+};
 
   
 
-  exports.getAllUserCostumer = (searchBy, keyword, limit=Number(DATA_LIMIT), offset=0, orderBy, sortType, cb) => {
-    db.query(`SELECT * FROM users_costumer WHERE ${searchBy} LIKE '%${keyword}%' ORDER BY ${orderBy} ${sortType} LIMIT $1 OFFSET $2`,
-      [limit, offset], (err, res) => {
-        if(err) {
-          cb(err)
-        }
-        cb(err, res.rows);
-      });
-  };
-   
-  exports.countAllUser = (searchBy, keyword, cb)=> {
-    db.query(`SELECT * FROM users_costumer WHERE ${searchBy} LIKE '%${keyword}%' `, (err, res)=>{
-      if(err){
-        cb(err)
+exports.getAllUserCostumer = (searchBy, keyword, limit=Number(DATA_LIMIT), offset=0, orderBy, sortType, cb) => {
+  db.query(`SELECT * FROM users_costumer WHERE ${searchBy} LIKE '%${keyword}%' ORDER BY ${orderBy} ${sortType} LIMIT $1 OFFSET $2`,
+    [limit, offset], (err, res) => {
+      if(err) {
+        cb(err);
       }
-      cb(err, res.rowCount);
-      
+      cb(err, res.rows);
     });
-  };
+};
+   
+exports.countAllUser = (searchBy, keyword, cb)=> {
+  db.query(`SELECT * FROM users_costumer WHERE ${searchBy} LIKE '%${keyword}%' `, (err, res)=>{
+    if(err){
+      cb(err);
+    }
+    cb(err, res.rowCount);
+      
+  });
+};
 
-  exports.updateUserCostumer = (id, data, cb)=>{
+exports.updateUserCostumer = (id, data, cb)=>{
   let value = [id];
   const filter = {};
     
