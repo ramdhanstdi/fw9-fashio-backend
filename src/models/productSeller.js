@@ -1,12 +1,12 @@
 const db = require('../helpers/db');
 
-exports.createProductModel = (data,sellerId,cb) => {
+exports.createProductModel = (data,photo1,photo2,photo3,photo4,photo5,sellerId,cb) => {
   db.query('BEGIN',err=>{
     if(err){
       cb(err);
     }else{
       const queryProduct = 'INSERT INTO products (name_product, price, condition, description, rating, seller_id, photo1,photo2,photo3,photo4,photo5) VALUES ($1, $2, $3, $4,$5,$6,$7,$8,$9,$10,$11) RETURNING*';
-      const valuesProduct = [data.name_product,data.price,data.condition,data.description,data.rating,sellerId,data.photo1,data.photo2,data.photo3,data.photo4,data.photo5];
+      const valuesProduct = [data.name_product,data.price,data.condition,data.description,data.rating,sellerId,photo1,photo2,photo3,photo4,photo5];
       db.query(queryProduct,valuesProduct,(err,respro)=>{
         if(err){
           cb(err);
@@ -42,7 +42,7 @@ exports.createProductModel = (data,sellerId,cb) => {
   });
 };
 
-exports.editProductModel = (id,seller, data, cb) =>{
+exports.editProductModel = (id,seller, data,photo1,photo2,photo3,photo4,photo5, cb) =>{
   let value = [id];
   const filtered = {};
   const obj = {
@@ -52,11 +52,11 @@ exports.editProductModel = (id,seller, data, cb) =>{
     description:data.description,
     rating:data.rating,
     seller_id:seller,
-    photo1:data.photo1,
-    photo2:data.photo2,
-    photo3:data.photo3,
-    photo4:data.photo4,
-    photo5:data.photo5
+    photo1,
+    photo2,
+    photo3,
+    photo4,
+    photo5
   };
   for(let i in obj){
     if(obj[i]!==null){
@@ -69,6 +69,79 @@ exports.editProductModel = (id,seller, data, cb) =>{
   const key = Object.keys(filtered);
   const resulting = key.map((o,index)=>`${o}=$${index+2}`);
   const que = `UPDATE products SET ${resulting} WHERE id=$1 RETURNING*`;
+  db.query(que,value,(err, res)=>{
+    if(res){
+      cb(err, res);
+    }else{
+      cb(err);
+    }
+  });
+};
+
+exports.showProductModel=(id,cb)=>{
+  const que = `SELECT * FROM products JOIN variant ON variant.product_id=products.id JOIN size ON size.variant_id=variant.id WHERE seller_id=${id}`;
+  db.query(que,(err,res)=>{
+    if(err){
+      cb(err);
+    }else{
+      cb(err,res);
+    }
+  });
+};
+
+exports.addVarianModel=(id,data,cb)=>{
+  const que = 'INSERT INTO variant (color,product_id) VALUES($1,$2) RETURNING*';
+  const val = [data.color,id];
+  db.query(que,val,(err,res)=>{
+    if(err){
+      cb(err);
+    }else{
+      cb(err,res);
+    }
+  });
+};
+
+exports.getSizeModel=(id,cb)=>{
+  const que = `SELECT * FROM size WHERE variant_id=${id}`;
+  db.query(que,(err,res)=>{
+    if(err){
+      cb(err);
+    }else{
+      cb(err,res);
+    }
+  });
+};
+
+exports.addSizeModel=(id,name,stock,cb)=>{
+  const que = 'INSERT INTO size (name,stock,variant_id) VALUES($1,$2,$3) RETURNING*';
+  const val = [name,stock,id];
+  db.query(que,val,(err,res)=>{
+    if(err){
+      cb(err);
+    }else{
+      cb(err,res);
+    }
+  });
+};
+
+exports.updateStock=(id,data,cb)=>{
+  let value = [id];
+  const filtered = {};
+  const obj = {
+    name:data.name,
+    stock:data.stock
+  };
+  for(let i in obj){
+    if(obj[i]!==null){
+      if(obj[i]!==undefined){
+        filtered[i]=obj[i];
+        value.push(obj[i]);
+      }
+    }
+  }
+  const key = Object.keys(filtered);
+  const resulting = key.map((o,index)=>`${o}=$${index+2}`);
+  const que = `UPDATE size SET ${resulting} WHERE variant_id=$1 RETURNING*`;
   db.query(que,value,(err, res)=>{
     if(res){
       cb(err, res);

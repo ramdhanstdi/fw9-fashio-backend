@@ -10,6 +10,7 @@ const rulesregister = [
   body('username')
     .isLength({min:5}).withMessage('Username should have min 5char')
     .trim().escape(),
+  body('phone').isMobilePhone(['id-ID']),
   body('password')
     .isLength({min:8}).withMessage('Password should have Minimal 8 char')
     .customSanitizer(async(pass)=>{
