@@ -92,7 +92,7 @@ exports.editProfileSellerModelbySeller = (id, data, cb) =>{
   }
   const key = Object.keys(filtered);
   const resulting = key.map((o,index)=>`${o}=$${index+2}`);
-  const que = `UPDATE profile_store SET ${resulting} WHERE id=$1 RETURNING*`;
+  const que = `UPDATE profile_store SET ${resulting} WHERE seller_id=$1 RETURNING*`;
   db.query(que,value,(err, res)=>{
     if(res){
       cb(err, res);
