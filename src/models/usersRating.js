@@ -1,5 +1,5 @@
 const db = require('../helpers/db');
-// const {LIMIT_DATA } = process.env;
+const {LIMIT_DATA } = process.env;
 
 // exports.createRatingModel = (data, cb) => {
 //   const q = 'INSERT INTO rating (product_id, seller_id, photo, review, rating, user_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *';
@@ -44,7 +44,6 @@ exports.create = (data, cb) => {
   const q = 'INSERT INTO rating (product_id, seller_id, photo, review, rating, costumer_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING*';
   const val = [data.product_id, data.seller_id, data.photo, data.review, data.rating, data.costumer_id];
   db.query(q, val, (err,res) => {
-    console.log(err);
     if(res){
       cb(err,res);
     }else{
@@ -55,7 +54,6 @@ exports.create = (data, cb) => {
 
 exports.read = (cb) => {
   db.query('SELECT * FROM rating', (err, res) => {
-    console.log(err);
     cb(res.rows);
   });
 };
@@ -100,5 +98,49 @@ exports.delete = (id, cb) => {
     }else{
       cb(err);
     }
+  });
+};
+
+exports.listRatings = (idPruduct, rating, method, limit=parseInt(LIMIT_DATA), offset=0,cb) => {
+  let val = [limit,offset];
+  const filtered = {};
+  const obj = {
+    rating: rating
+  };
+  for(let i in obj){
+    if(obj[i]!==null){
+      if(obj[i]!==undefined){
+        filtered[i]=obj[i];
+        val.push(obj[i]);
+      }
+    }
+  }
+  const key = Object.keys(filtered);
+  const resulting = key.map((o,index)=>`AND ${o} = $${index+3}`);
+  const q = `SELECT * FROM rating WHERE product_id = ${idPruduct} ${resulting} ORDER BY id ${method} LIMIT $1 OFFSET $2`;
+  db.query(q, val, (err,res)=> {
+    cb(err,res);
+  });
+};
+
+exports.countListRatings = (idPruduct, rating, cb) => {
+  let val = [];
+  const filtered = {};
+  const obj = {
+    rating: rating
+  };
+  for(let i in obj){
+    if(obj[i]!==null){
+      if(obj[i]!==undefined){
+        filtered[i]=obj[i];
+        val.push(obj[i]);
+      }
+    }
+  }
+  const key = Object.keys(filtered);
+  const resulting = key.map((o,index)=>`AND ${o} = $${index+1}`);
+  const q = `SELECT * FROM rating WHERE product_id = ${idPruduct} ${resulting}`;
+  db.query(q, val, (err, res)=> {
+    cb(err,res.rowCount);
   });
 };
