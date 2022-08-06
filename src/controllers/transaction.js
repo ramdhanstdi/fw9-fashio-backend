@@ -1,10 +1,10 @@
 const response = require('../helpers/standardResponse');
 const errorResponse = require('../helpers/errorResponse');
-const profileModel = require('../models/profileCustomer');
+const transactionModel = require('../models/transaction');
 const { validationResult } = require('express-validator');
 const { LIMIT_DATA } = process.env;
 
-exports.getAllProfile = (req, res) => {
+exports.getAllTransaction = (req, res) => {
   // console.log(res);
   const {
     search = '',
@@ -14,8 +14,8 @@ exports.getAllProfile = (req, res) => {
     page = 1,
   } = req.query;
   const offset = (page - 1) * limit;
-
-  profileModel.getAllProfile(
+  
+  transactionModel.getAllTransaction(
     search,
     sortBy,
     sorting,
@@ -27,27 +27,27 @@ exports.getAllProfile = (req, res) => {
         return response(res, 'Data not found', null, 404);
       }
       const pageInfo = {};
-      profileModel.countAllProfile(search, (err, totalData) => {
+      transactionModel.countAllTransaction(search, (err, totalData) => {
         pageInfo.totalData = totalData;
         pageInfo.totalPage = Math.ceil(totalData / limit);
         pageInfo.currentPage = page;
         pageInfo.nextPage =
-          pageInfo.currentPage < pageInfo.totalPage
-            ? pageInfo.currentPage + 1
-            : null;
+            pageInfo.currentPage < pageInfo.totalPage
+              ? pageInfo.currentPage + 1
+              : null;
         pageInfo.previousPage =
-          pageInfo.currentPage > 1 ? pageInfo.currentPage - 1 : null;
-
+            pageInfo.currentPage > 1 ? pageInfo.currentPage - 1 : null;
+  
         return response(res, 'List all data', results, pageInfo);
       });
     }
   );
 };
-
-exports.getDetailProfile = (req, res) => {
+  
+exports.getDetailTransaction = (req, res) => {
   const { id } = req.params;
 
-  profileModel.getDetailProfile(id, (err, results) => {
+  transactionModel.getDetailTransaction(id, (err, results) => {
     console.log(results);
     if (results.rows.length > 0) {
       return response(res, `Success get data by id : ${id}`, results.rows);
@@ -57,7 +57,7 @@ exports.getDetailProfile = (req, res) => {
   });
 };
 
-exports.createProfile = (req, res) => {
+exports.createTransaction = (req, res) => {
   const validation = validationResult(req);
   if (!validation.isEmpty()) {
     return response(
@@ -68,22 +68,17 @@ exports.createProfile = (req, res) => {
       400
     );
   }
-  profileModel.createProfile(req.body, (results) => {
+  transactionModel.createTransaction(req.body, (results) => {
     // console.log(req.body);
-    return response(res, 'Create profile successfully', results);
+    return response(res, 'Create transaction successfully', results.rows);
   });
 };
 
-exports.updateProfile = (req, res) => {
+exports.updateTransaction = (req, res) => {
   const { id } = req.params;
 
-  let filename = null;
-
-  if (req.file) {
-    filename = req.file.filename;
-  }
   const validation = validationResult(req);
-  if (!validation.isEmpty()) {
+  if (!validation) {
     return response(
       res,
       'Please fill data correctly',
@@ -93,21 +88,22 @@ exports.updateProfile = (req, res) => {
     );
   }
 
-  profileModel.updateProfile(id, filename, req.body, (err, results) => {
+  transactionModel.updateTransaction(id,  req.body, (err, results) => {
     if (err) {
       return errorResponse(
         res,
         `Failed to update: ${err.message}, null, null, 400`
       );
     } else {
-      return response(res, 'Profile updated successfully', results.rows[0]);
+      return response(res, 'Transaction updated successfully', results.rows[0]);
     }
   });
 };
 
-exports.deleteProfile = (req, res) => {
+exports.deleteTransaction = (req, res) => {
   const { id } = req.params;
-  profileModel.deleteProfile(id, (err, results) => {
+  transactionModel.deleteTransaction(id, (err, results) => {
+    // console.log(results);
     if (results.rows.length > 0) {
       return response(res, `Success deleted data by id : ${id}`, null);
     } else {
