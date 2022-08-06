@@ -33,7 +33,9 @@ exports.loginUser = (req,res) => {
 
 exports.editSeller = (req,res) => {
   const sellerId= req.authUser.id;
-  profileSeller.editProfileSellerModelbySeller(sellerId,req.body,(err,result)=>{
+  let photo = null;
+  req.files?photo=req.files[0].filename:photo=null;
+  profileSeller.editProfileSellerModelbySeller(sellerId,photo,req.body,(err,result)=>{
     if(err){
       return errorResponse(err,res);
     }else{
