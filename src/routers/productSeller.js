@@ -1,18 +1,13 @@
 const productSeller = require('express').Router();
 const productSellerController = require('../controllers/productSeller');
 const auth = require('../middleware/auth');
-const validation = require('../middleware/validation');
-const {body} = require('express-validator');
-
-const rulesProduct = [
-  body('name_product').isLength({min:5}).escape(),
-  body('description').isLength({min:10}),
-  body('color').isLength({min:1}),
-  body('stock').isLength({min:1})
-];
+const upload = require('../middleware/upload');
 
 
-productSeller.post('/inputProduct',auth,rulesProduct,validation,productSellerController.createProduct);
-productSeller.patch('/editProduct',auth,rulesProduct,validation,productSellerController.editProduct);
+productSeller.get('/showProductSeller',auth,productSellerController.showProductStore);
+productSeller.post('/inputProduct',auth,upload,productSellerController.createProduct);
+productSeller.patch('/editProduct',auth,upload,productSellerController.editProduct);
+productSeller.post('/addVariantProduct',auth,productSellerController.addVariant);
+productSeller.post('/updateSizeStock',auth,productSellerController.addSizeAndStock);
 
 module.exports=productSeller;

@@ -72,7 +72,7 @@ exports.editProfileSellerModel = (id, data, cb) =>{
 };
 
 //For Seller
-exports.editProfileSellerModelbySeller = (id, data, cb) =>{
+exports.editProfileSellerModelbySeller = (id,photo,data, cb) =>{
   let value = [id];
   const filtered = {};
   const obj = {
@@ -80,7 +80,7 @@ exports.editProfileSellerModelbySeller = (id, data, cb) =>{
     phone:data.phone, 
     store_name:data.store_name, 
     description:data.description, 
-    photo:data.photo, 
+    photo:photo, 
   };
   for(let i in obj){
     if(obj[i]!==null){
