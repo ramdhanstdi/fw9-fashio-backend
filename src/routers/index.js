@@ -7,5 +7,6 @@ router.use('/admin/profileSeller', require('./profileSeller'));
 router.use('/',require('./registerSeller'));
 router.use('/',require('./productSeller'));
 router.use('/',require('./loginSeller'));
+router.use('/',require('./chat'));
 
 module.exports = router;

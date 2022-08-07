@@ -1,4 +1,5 @@
 const db = require('../helpers/db');
+const {LIMIT_DATA} = process.env;
 
 exports.createProductModel = (data,photo1,photo2,photo3,photo4,photo5,sellerId,cb) => {
   db.query('BEGIN',err=>{
@@ -78,9 +79,11 @@ exports.editProductModel = (id,seller, data,photo1,photo2,photo3,photo4,photo5, 
   });
 };
 
-exports.showProductModel=(id,cb)=>{
-  const que = `SELECT * FROM products JOIN variant ON variant.product_id=products.id JOIN size ON size.variant_id=variant.id WHERE seller_id=${id}`;
-  db.query(que,(err,res)=>{
+//Show ALL Product from database
+exports.showAllProductModel=(searchBy,keyword,orderBy,order,limit=parseInt(LIMIT_DATA), offset=0,cb)=>{
+  const que = `SELECT * FROM products JOIN variant ON variant.product_id=products.id JOIN size ON size.variant_id=variant.id WHERE ${searchBy} LIKE '%${keyword}%' ORDER BY ${orderBy} ${order} LIMIT $1 OFFSET $2`;
+  const val = [limit,offset];
+  db.query(que,val,(err,res)=>{
     if(err){
       cb(err);
     }else{
@@ -89,6 +92,42 @@ exports.showProductModel=(id,cb)=>{
   });
 };
 
+exports.countAllProductsModel=(searchBy,keyword,cb)=>{
+  const que = `SELECT * FROM products JOIN variant ON variant.product_id=products.id JOIN size ON size.variant_id=variant.id WHERE ${searchBy} LIKE ${keyword}`;
+  db.query(que,(err,res)=>{
+    if(err){
+      cb(err);
+    }else{
+      cb(err,res.rowCount);
+    }
+  });
+};
+
+//Show ALL Seller Product
+exports.showProductModel=(id,searchBy,keyword,orderBy,order,limit=parseInt(LIMIT_DATA), offset=0,cb)=>{
+  const que = `SELECT * FROM products JOIN variant ON variant.product_id=products.id JOIN size ON size.variant_id=variant.id WHERE ${searchBy} LIKE '%${keyword}%' AND seller_id=${id} ORDER BY ${orderBy} ${order} LIMIT $1 OFFSET $2`;
+  const val = [limit,offset];
+  db.query(que,val,(err,res)=>{
+    if(err){
+      cb(err);
+    }else{
+      cb(err,res);
+    }
+  });
+};
+
+exports.countAllProductSellerModel=(id,searchBy,keyword,cb)=>{
+  const que = `SELECT * FROM products JOIN variant ON variant.product_id=products.id JOIN size ON size.variant_id=variant.id WHERE ${searchBy} LIKE ${keyword} AND seller_id=${id}`;
+  db.query(que,(err,res)=>{
+    if(err){
+      cb(err);
+    }else{
+      cb(err,res.rowCount);
+    }
+  });
+};
+
+//For Adding Varian Products
 exports.addVarianModel=(id,data,cb)=>{
   const que = 'INSERT INTO variant (color,product_id) VALUES($1,$2) RETURNING*';
   const val = [data.color,id];
@@ -147,6 +186,17 @@ exports.updateStock=(id,data,cb)=>{
       cb(err, res);
     }else{
       cb(err);
+    }
+  });
+};
+
+exports.deleteProductModel = (id,cb) =>{
+  const que = `DELETE FROM products WHERE id=${id} RETURNING*`;
+  db.query(que,(err,res)=>{
+    if(err){
+      cb(err);
+    }else{
+      cb(err,res);
     }
   });
 };

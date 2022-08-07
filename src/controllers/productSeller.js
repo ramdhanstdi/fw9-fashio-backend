@@ -1,6 +1,7 @@
 const productSeller = require('../models/productSeller');
 const response = require('../helpers/standardResponse');
 const errorResponse = require('../helpers/errorResponse');
+const {LIMIT_DATA} = process.env;
 
 exports.createProduct = (req,res) =>{
   console.log(req.body);
@@ -48,14 +49,44 @@ exports.editProduct = (req,res) => {
   });
 };
 
+exports.showAllProduct = (req,res)=>{
+  const {searchBy='name_product',search='',sortBy='product_id',sort='DESC',limit=parseInt(LIMIT_DATA), page=1} = req.query;
+  const offset = (page-1) * limit;
+  productSeller.showAllProductModel(searchBy,search,sortBy,sort,limit,offset,(err,result)=>{
+    if(err){
+      console.log(err);
+      return errorResponse(err);
+    }
+    const pageInfo = {};
+    productSeller.countAllProductsModel(searchBy,search,(err,totalusers)=>{
+      pageInfo.totalData = totalusers;
+      pageInfo.totalPage = Math.ceil(totalusers/limit);
+      pageInfo.curretPage = parseInt(page);
+      pageInfo.nextPage = pageInfo.curretPage < pageInfo.totalPage? pageInfo.curretPage+1:null;
+      pageInfo.prevPage = pageInfo.curretPage > 1 ? pageInfo.curretPage-1:null;
+      return response(res,'Showing History',result.rows,pageInfo);
+    });
+  });
+};
+
 exports.showProductStore = (req,res) => {
   const sellerId= req.authUser.id;
-  productSeller.showProductModel(sellerId,(err,result)=>{
+  const {searchBy='name_product',search='',sortBy='product_id',sort='DESC',limit=parseInt(LIMIT_DATA), page=1} = req.query;
+  const offset = (page-1) * limit;
+  productSeller.showProductModel(sellerId,searchBy,search,sortBy,sort,limit,offset,(err,result)=>{
     if(err){
       console.log(err);
       return errorResponse(err,res);
     }
-    return response(res,'Show Product Seller',result.rows);
+    const pageInfo = {};
+    productSeller.countAllProductSellerModel(sellerId,searchBy,search,(err,totalusers)=>{
+      pageInfo.totalData = totalusers;
+      pageInfo.totalPage = Math.ceil(totalusers/limit);
+      pageInfo.curretPage = parseInt(page);
+      pageInfo.nextPage = pageInfo.curretPage < pageInfo.totalPage? pageInfo.curretPage+1:null;
+      pageInfo.prevPage = pageInfo.curretPage > 1 ? pageInfo.curretPage-1:null;
+      return response(res,'Showing History',result.rows,pageInfo);
+    });
   });
 };
 
@@ -99,6 +130,19 @@ exports.addSizeAndStock = (req,res)=>{
         }
         return response(res,'Size and Stock Updated',result.rows);
       });
+    }
+  });
+};
+
+exports.deleteProduct=(req,res)=>{
+  productSeller.deleteProductModel(req.params.id,(err,result)=>{
+    if(err){
+      return errorResponse(err,res);
+    }
+    if(result.rowCount<1){
+      return response(res,'id Not Found or Deleted',null,null,400);
+    }else{
+      return response(res,'Success Delete Product',result.rows[0]);
     }
   });
 };
