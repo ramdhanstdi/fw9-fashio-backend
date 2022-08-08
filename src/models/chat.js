@@ -25,7 +25,7 @@ exports.sellerChatModel=(seller,data,cb)=>{
 };
 
 exports.getHistoryChatModel=(id,cb)=>{
-  const que=`SELECT * FROM chats JOIN profile_costumer ON chats.costumer_id=profile_costumer.costumer_id JOIN profile_store ON profile_store.seller_id=chats.seller_id WHERE chats.seller_id=${id} OR chats.costumer_id=${id}`;
+  const que=`SELECT chats.id,chats.seller_id,chats.costumer_id,chat,profile_costumer.full_name,profile_store.store_name FROM chats JOIN profile_costumer ON chats.costumer_id=profile_costumer.costumer_id JOIN profile_store ON profile_store.seller_id=chats.seller_id WHERE chats.seller_id=${id} OR chats.costumer_id=${id}`;
   db.query(que,(err,res)=>{
     if(err){
       cb(err);

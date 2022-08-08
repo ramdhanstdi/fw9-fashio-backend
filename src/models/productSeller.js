@@ -81,7 +81,7 @@ exports.editProductModel = (id,seller, data,photo1,photo2,photo3,photo4,photo5, 
 
 //Show ALL Product from database
 exports.showAllProductModel=(searchBy,keyword,orderBy,order,limit=parseInt(LIMIT_DATA), offset=0,cb)=>{
-  const que = `SELECT products.id,name_product,price,condition,photo1,photo2,photo3,photo4,photo5,rating,seller_id FROM products JOIN variant ON variant.product_id=products.id JOIN size ON size.variant_id=variant.id WHERE ${searchBy} LIKE '%${keyword}%' ORDER BY ${orderBy} ${order} LIMIT $1 OFFSET $2`;
+  const que = `SELECT products.id,name_product,price,condition,photo1,photo2,photo3,photo4,photo5,rating,seller_id,color,name,stock FROM products JOIN variant ON variant.product_id=products.id JOIN size ON size.variant_id=variant.id WHERE ${searchBy} LIKE '%${keyword}%' ORDER BY ${orderBy} ${order} LIMIT $1 OFFSET $2`;
   const val = [limit,offset];
   db.query(que,val,(err,res)=>{
     if(err){
@@ -105,7 +105,7 @@ exports.countAllProductsModel=(searchBy,keyword,cb)=>{
 
 //Show ALL Seller Product
 exports.showProductModel=(id,searchBy,keyword,orderBy,order,limit=parseInt(LIMIT_DATA), offset=0,cb)=>{
-  const que = `SELECT products.id,name_product,price,condition,photo1,photo2,photo3,photo4,photo5,rating,seller_id FROM products JOIN variant ON variant.product_id=products.id JOIN size ON size.variant_id=variant.id WHERE ${searchBy} LIKE '%${keyword}%' AND seller_id=${id} ORDER BY ${orderBy} ${order} LIMIT $1 OFFSET $2`;
+  const que = `SELECT products.id,name_product,price,condition,photo1,photo2,photo3,photo4,photo5,rating,seller_id,color,name,stock FROM products JOIN variant ON variant.product_id=products.id JOIN size ON size.variant_id=variant.id WHERE ${searchBy} LIKE '%${keyword}%' AND seller_id=${id} ORDER BY ${orderBy} ${order} LIMIT $1 OFFSET $2`;
   const val = [limit,offset];
   db.query(que,val,(err,res)=>{
     if(err){
