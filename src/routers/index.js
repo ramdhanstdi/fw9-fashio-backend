@@ -4,15 +4,20 @@ const router = require('express').Router();
 router.use('/admin/profileSeller', require('./profileSeller'));
 
 //Router Users
-router.use('/',require('./registerSeller'));
+router.use('/seller',require('./registerSeller'));
 router.use('/',require('./productSeller'));
 router.use('/',require('./loginSeller'));
 router.use('/',require('./chat'));
+
 router.use('/',require('./myBag'));
 router.use('/',require('./transaction'));
 
 //Get Costumer after Login
 router.use('/',require('./loginCostumer'));
+
+router.use('/', require('./auth'));
+router.use('/address-costumer', require('./addressCostumer'));
+
 
 //roters up
 router.use('/auth', require('./auth'));

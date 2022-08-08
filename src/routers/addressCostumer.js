@@ -19,7 +19,7 @@ addressCostumer.post('/', authMiddle, ...addressValidation, addressCostumerContr
 addressCostumer.get('/', authMiddle, addressCostumerController.getAllUserCostumer);
 addressCostumer.patch('/:id', authMiddle, ...addressValidation, addressCostumerController.updateAddressCostumer);
 addressCostumer.delete('/:id', authMiddle, addressCostumerController.deleteAddressCostumer);
-addressCostumer.get('/:id', addressCostumerController.detailAddressCostumer);
+addressCostumer.get('/:id',authMiddle, addressCostumerController.detailAddressCostumer);
 //usersCostumer.get('/', body('limit').toInt(), body('page').toInt(),userController.getAllUsers);
 //console.log();
 
