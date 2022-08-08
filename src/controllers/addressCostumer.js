@@ -73,10 +73,13 @@ exports.deleteAddressCostumer = (req, res)=>{
 };
 
 exports.detailAddressCostumer = (req, res)=>{
-  const {id} =req.params;
+  const {id} = req.params;
   addressCostumerModel.detailAddressCostumer(id, (err, results)=>{
+    if (err) {
+      return errResponse(err, res);
+    }
     if(results.length > 0 ){
-      return response(res, 'Address Details', results[0]); 
+      return response(res, 'Address Details', results); 
     }else{
       return res.redirect('/404');
     }
