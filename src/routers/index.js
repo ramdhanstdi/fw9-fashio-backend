@@ -9,6 +9,7 @@ router.use('/',require('./productSeller'));
 router.use('/',require('./loginSeller'));
 router.use('/',require('./chat'));
 router.use('/',require('./myBag'));
+router.use('/',require('./transaction'));
 
 //Get Costumer after Login
 router.use('/',require('./loginCostumer'));

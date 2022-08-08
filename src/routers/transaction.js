@@ -1,10 +1,10 @@
 const transactionController = require('../controllers/transaction');
-const express = require('express');
-const Router = express.Router();
+const transaction = require('express').Router();
 const { body } = require('express-validator');
-// const checkId = require('../middleware/checkId');
+const auth = require('../controllers/auth');
+const validation = require('../middleware/validation');
 
-const validation = [
+const rules = [
   body('quantity')
     .isNumeric()
     .withMessage('Please input number'),
@@ -24,10 +24,10 @@ const validation = [
 
 ];
   
-Router.get('/', transactionController.getAllTransaction);
-Router.get('/:id', transactionController.getDetailTransaction);
-Router.post('/', validation, transactionController.createTransaction);
-Router.patch('/:id', validation, transactionController.updateTransaction);
-Router.delete('/:id', transactionController.deleteTransaction);
+transaction.get('/transaction' ,auth,transactionController.getAllTransaction);
+transaction.get('/transaction/:id',auth,transactionController.getDetailTransaction);
+transaction.post('/transaction',auth,rules,validation, transactionController.createTransaction);
+transaction.patch('/transaction/:id',auth,rules,validation, transactionController.updateTransaction);
+transaction.delete('/transaction/:id',auth,transactionController.deleteTransaction);
 
-module.exports = Router;
+module.exports = transaction;

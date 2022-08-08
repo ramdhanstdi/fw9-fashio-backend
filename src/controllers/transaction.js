@@ -68,7 +68,10 @@ exports.createTransaction = (req, res) => {
       400
     );
   }
-  transactionModel.createTransaction(req.body, (results) => {
+  transactionModel.createTransaction(req.body, (err,results) => {
+    if(err){
+      return errorResponse(err,res);
+    }
     // console.log(req.body);
     return response(res, 'Create transaction successfully', results.rows);
   });
