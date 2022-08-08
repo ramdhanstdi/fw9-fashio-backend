@@ -14,12 +14,12 @@ exports.welcome = (req, res)=>{
 
 exports.createAddressCostumer = (req, res)=>{
   const { id } = req.authUser;
-  const valdation = validationResult(req);
-  if(!valdation.isEmpty()){
-    return response(res, 'Error occurd', valdation.array(), null, 400);
-  }
-  console.log(id);
-  addressCostumerModel.createAddressCostumer(id, req.body, (err, results)=>{
+  // const valdation = validationResult(req);
+  // if(!valdation.isEmpty()){
+  //   return response(res, 'Error occurd', valdation.array(), null, 400);
+  // }
+  // console.log(id);
+  addressCostumerModel.createAddress(id, req.body, (err, results)=>{
     if (err) {
       return errResponse(err, res);
     }else{
@@ -85,4 +85,32 @@ exports.detailAddressCostumer = (req, res)=>{
     }
   });
 };
+
+exports.primaryAddCostumer = (req, res)=>{
+  const {id} =req.params;
+  addressCostumerModel.primaryAddCostumer(id, (err, results)=>{
+    if(results.length > 0 ){
+      return response(res, 'Address Details', results); 
+    }else{
+      return res.redirect('/404');
+    }
+  });
+};
+
+
+// exports.createAddressCostumer = (req, res)=>{
+//   const { id } = req.authUser;
+//   // const valdation = validationResult(req);
+//   // if(!valdation.isEmpty()){
+//   //   return response(res, 'Error occurd', valdation.array(), null, 400);
+//   // }
+//   // console.log(id);
+//   addressCostumerModel.primaryAddCostumer(id, req.body, (err, results)=>{
+//     if (err) {
+//       return errResponse(err, res);
+//     }else{
+//       return response(res, 'Create Address successfully', results[0]);
+//     }
+//   });
+// };
 
