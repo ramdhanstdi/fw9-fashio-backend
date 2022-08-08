@@ -61,6 +61,7 @@ exports.updateProfile = (id, picture, data, cb) => {
     full_name: data.full_name,
     phone: data.phone,
     gender: data.gender,
+    birth_date:data.birth_date
   };
 
   for (let x in objt) {
@@ -73,7 +74,7 @@ exports.updateProfile = (id, picture, data, cb) => {
   const key = Object.keys(filtered);
   const finalResult = key.map((o, ind) => `${o}=$${ind + 2}`);
 
-  const q = `UPDATE profile_costumer SET ${finalResult} WHERE id=$1 RETURNING *`;
+  const q = `UPDATE profile_costumer SET ${finalResult} WHERE costumer_id=$1 RETURNING *`;
   db.query(q, val, (err, res) => {
     if (res) {
       cb(err, res);
