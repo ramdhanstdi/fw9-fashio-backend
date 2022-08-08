@@ -8,6 +8,10 @@ router.use('/',require('./registerSeller'));
 router.use('/',require('./productSeller'));
 router.use('/',require('./loginSeller'));
 router.use('/',require('./chat'));
+router.use('/',require('./myBag'));
+
+//Get Costumer after Login
+router.use('/',require('./loginCostumer'));
 
 //roters up
 router.use('/auth', require('./auth'));
