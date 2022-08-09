@@ -1,7 +1,7 @@
 const transactionController = require('../controllers/transaction');
 const transaction = require('express').Router();
 const { body } = require('express-validator');
-const auth = require('../controllers/auth');
+const auth = require('../middleware/auth');
 const validation = require('../middleware/validation');
 
 const rules = [
@@ -24,7 +24,7 @@ const rules = [
 
 ];
   
-transaction.get('/transaction' ,auth,transactionController.getAllTransaction);
+transaction.get('/transaction',auth,transactionController.getAllTransaction);
 transaction.get('/transaction/:id',auth,transactionController.getDetailTransaction);
 transaction.post('/transaction',auth,rules,validation, transactionController.createTransaction);
 transaction.patch('/transaction/:id',auth,rules,validation, transactionController.updateTransaction);
