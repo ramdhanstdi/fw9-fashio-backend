@@ -16,6 +16,14 @@ const errorResponse = (err, res) => {
   if (err.code === '23505' && err.detail.includes('username')) {
     const eres = handlingErr('Username already exist', 'username');
     return response(res, 'Error', eres, null, 400);
+  } 
+  if (err.code === '23505' && err.detail.includes('phone')) {
+    const eres = handlingErr('Phone already used', 'phone');
+    return response(res, 'Error', eres, null, 400);
+  }
+  if (err.code === '23505' && err.detail.includes('store_name')) {
+    const eres = handlingErr('Store name already exist', 'store_name');
+    return response(res, 'Error', eres, null, 400);
   }
 
   // rating

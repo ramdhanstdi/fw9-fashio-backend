@@ -93,7 +93,7 @@ exports.showAllProductModel=(searchBy,keyword,orderBy,order,limit=parseInt(LIMIT
 };
 
 exports.countAllProductsModel=(searchBy,keyword,cb)=>{
-  const que = `SELECT * FROM products JOIN variant ON variant.product_id=products.id JOIN size ON size.variant_id=variant.id WHERE ${searchBy} LIKE ${keyword}`;
+  const que = `SELECT * FROM products JOIN variant ON variant.product_id=products.id JOIN size ON size.variant_id=variant.id WHERE ${searchBy} LIKE '%${keyword}%'`;
   db.query(que,(err,res)=>{
     if(err){
       cb(err);
@@ -117,7 +117,7 @@ exports.showProductModel=(id,searchBy,keyword,orderBy,order,limit=parseInt(LIMIT
 };
 
 exports.countAllProductSellerModel=(id,searchBy,keyword,cb)=>{
-  const que = `SELECT * FROM products JOIN variant ON variant.product_id=products.id JOIN size ON size.variant_id=variant.id WHERE ${searchBy} LIKE ${keyword} AND seller_id=${id}`;
+  const que = `SELECT * FROM products JOIN variant ON variant.product_id=products.id JOIN size ON size.variant_id=variant.id WHERE ${searchBy} LIKE '%${keyword}%' AND seller_id=${id}`;
   db.query(que,(err,res)=>{
     if(err){
       cb(err);

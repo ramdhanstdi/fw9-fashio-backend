@@ -45,7 +45,7 @@ exports.createTransaction = (data, cb) => {
   const val = [data.status, data.order_number, data.tracking_number, data.quantity, data.total_amount, data.payment_method, data.product_id, data.details, data.seller_id, data.costumer_id];
 
   db.query(q, val, (err, res) => {
-    cb(res);
+    cb(err,res);
     // console.log(err);
   });
 };
