@@ -4,15 +4,12 @@ const authMiddle = require('../middleware/auth');
 const { body } = require('express-validator');
 
 const addressValidation = [
-  body('phone')
+  body('recepient_phone')
     .isMobilePhone('id-ID')
     .withMessage('Phone number must be indonesian code'),
   body('postal_code')
     .toInt()
     .isNumeric().withMessage('Postal Code must be INT'),
-  body('primary_address')
-    .isBoolean()
-    .withMessage('Must be a boolean true or false')
 ];
 
 addressCostumer.post('/', authMiddle, ...addressValidation, addressCostumerController.createAddressCostumer);

@@ -14,18 +14,28 @@ exports.welcome = (req, res)=>{
 
 exports.createAddressCostumer = (req, res)=>{
   const { id } = req.authUser;
-  // const valdation = validationResult(req);
-  // if(!valdation.isEmpty()){
-  //   return response(res, 'Error occurd', valdation.array(), null, 400);
-  // }
-  // console.log(id);
-  addressCostumerModel.createAddress(id, req.body, (err, results)=>{
-    if (err) {
-      return errResponse(err, res);
-    }else{
-      return response(res, 'Create Address successfully', results[0]);
-    }
-  });
+  const  primary_address = req.body.primary_address;
+  const valdation = validationResult(req);
+  if(!valdation.isEmpty()){
+    return response(res, 'Error occurd', valdation.array(), 400);
+  }
+  if (primary_address === false || primary_address === undefined || primary_address === null || primary_address === ''){
+    addressCostumerModel.createAddressNew(id, req.body, (err, results)=>{
+      if (err) {
+        return errResponse(err, res);
+      }else{
+        return response(res, 'Create Address successfully', results[0]);
+      }
+    });
+  }else{
+    addressCostumerModel.createAddress(id, req.body, (err, results)=>{
+      if (err) {
+        return errResponse(err, res);
+      }else{
+        return response(res, 'Create Address successfully', results[0]);
+      }
+    });
+  }
 };
 
 
@@ -43,22 +53,29 @@ exports.getAllUserCostumer = (req, res)=>{
 };
 
 exports.updateAddressCostumer = (req, res)=>{
-  const {id} = req.params;
+  const { id } = req.authUser;
+  const  primary_address = req.body.primary_address;
   const valdation = validationResult(req);
   if(!valdation.isEmpty()){
     return response(res, 'Error occurd', valdation.array(), 400);
   }
-  addressCostumerModel.updateAddressCostumer(id, req.body, (err, results)=>{
-    if(results.length > 0 ){
+  if (primary_address === false || primary_address === undefined || primary_address === null || primary_address === ''){
+    addressCostumerModel.updateAddressNew(id, req.body, (err, results)=>{
       if (err) {
         return errResponse(err, res);
-      } else {
-        return response(res, 'Edit Address successfully', results[0]);
+      }else{
+        return response(res, 'Create Address successfully', results[0]);
       }
-    }else{
-      return res.redirect('/404');
-    }
-  });
+    });
+  }else{
+    addressCostumerModel.updateAddress(id, req.body, (err, results)=>{
+      if (err) {
+        return errResponse(err, res);
+      }else{
+        return response(res, 'Create Address successfully', results[0]);
+      }
+    });
+  }
 };
 
 exports.deleteAddressCostumer = (req, res)=>{
@@ -93,21 +110,4 @@ exports.primaryAddCostumer = (req, res)=>{
     }
   });
 };
-
-
-// exports.createAddressCostumer = (req, res)=>{
-//   const { id } = req.authUser;
-//   // const valdation = validationResult(req);
-//   // if(!valdation.isEmpty()){
-//   //   return response(res, 'Error occurd', valdation.array(), null, 400);
-//   // }
-//   // console.log(id);
-//   addressCostumerModel.primaryAddCostumer(id, req.body, (err, results)=>{
-//     if (err) {
-//       return errResponse(err, res);
-//     }else{
-//       return response(res, 'Create Address successfully', results[0]);
-//     }
-//   });
-// };
 
