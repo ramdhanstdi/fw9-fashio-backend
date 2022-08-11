@@ -19,5 +19,8 @@ addressCostumer.delete('/:id', authMiddle, addressCostumerController.deleteAddre
 addressCostumer.get('/:id',authMiddle, addressCostumerController.detailAddressCostumer);
 //usersCostumer.get('/', body('limit').toInt(), body('page').toInt(),userController.getAllUsers);
 //console.log();
+// undermaintain yoga
+addressCostumer.patch('/edit/:id', authMiddle, ...addressValidation, addressCostumerController.editAddess);
+// undermaintain yoga
 
 module.exports = addressCostumer ;

@@ -260,3 +260,94 @@ exports.updateAddress = (costumer_id, data, cb) =>{
 };
 
   
+// try edit address
+exports.editWithoutPrimary = (id, data, cb)=> {
+  let val = [id];
+  const filter = {};
+  const obj = {
+    
+    recepient_name: data.recepient_name, 
+    recepient_phone: data.recepient_phone, 
+    address: data.address, 
+    city: data.city, 
+    postal_code: data.postal_code, 
+    primary_address: data.primary_address, 
+    place_name: data.place_name,
+    
+  };
+
+  for(let x in obj){
+    if(obj[x]!==null){
+      if(obj[x]!==undefined){
+        filter[x] = obj[x];
+        val.push(obj[x]);
+      }
+    }
+  }
+
+  const key = Object.keys(filter);
+  const finalRes = key.map((o, ind) => `${o}=$${ind+2}`);
+  const q = `UPDATE address_costumer SET ${finalRes} WHERE id=$1 RETURNING *`;
+  db.query(q, val, (err, res)=> {
+    if(err) {
+      cb(err);
+    }else{
+      cb(err, res);
+    }
+  });
+};
+
+exports.editWithPrimary= (id, costumer_id, data, cb)=> {
+  db.query('BEGIN', err=>{
+    if (err) {
+      cb(err);
+    } else {
+      const q = 'UPDATE address_costumer SET primary_address = $2 WHERE costumer_id =$1 RETURNING *';
+      const val = [costumer_id, false];
+      db.query(q, val, (err)=> {
+        if(err){
+          cb(err);
+        } else {
+          let val2 = [id];
+          const filter = {};
+          const obj = {
+            
+            recepient_name: data.recepient_name, 
+            recepient_phone: data.recepient_phone, 
+            address: data.address, 
+            city: data.city, 
+            postal_code: data.postal_code, 
+            primary_address: data.primary_address, 
+            place_name: data.place_name,
+            
+          };
+          for(let x in obj){
+            if(obj[x]!==null){
+              if(obj[x]!==undefined){
+                filter[x] = obj[x];
+                val2.push(obj[x]);
+              }
+            }
+          }
+
+          const key = Object.keys(filter);
+          const finalRes = key.map((o, ind) => `${o}=$${ind+2}`);
+          const q2 = `UPDATE address_costumer SET ${finalRes} WHERE id=$1 RETURNING *`;
+          db.query(q2, val2, (err, res2)=> {
+            if(err) {
+              cb(err);
+            } else {
+              cb(err,res2.rows);
+              db.query('COMMIT',err=>{
+                if(err){
+                  console.log(err);
+                }
+              });
+            }
+          });
+        }
+      });
+    }
+  });
+};
+// try edit address

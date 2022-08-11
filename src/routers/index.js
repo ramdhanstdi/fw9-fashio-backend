@@ -22,6 +22,6 @@ router.use('/address-costumer', require('./addressCostumer'));
 //roters up
 router.use('/auth', require('./auth'));
 router.use('/users-costumer', require('./usersCostumer'));
-router.use('/address-costumer', require('./addressCostumer'));
+// router.use('/address-costumer', require('./addressCostumer'));
 
 module.exports = router;

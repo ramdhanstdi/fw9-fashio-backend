@@ -119,3 +119,27 @@ exports.primaryAddCostumer = (req, res)=>{
   });
 };
 
+// try update update address
+exports.editAddess = (req, res)=> {
+  const { id } = req.authUser;
+  const id_address = parseInt(req.params.id);
+  const  {primary_address} = req.body;
+  if ( primary_address === 'false'  || primary_address === false || primary_address === undefined || primary_address === null || primary_address === ''){
+    addressCostumerModel.editWithoutPrimary(id_address, req.body, (err, results)=>{
+      if (err) {
+        return errResponse(err, res);
+      }else{
+        return response(res, 'Update Address successfully', results[0]);
+      }
+    });
+  }else{
+    addressCostumerModel.editWithPrimary(id_address, id, req.body, (err, results1)=>{
+      if (err) {
+        return errResponse(err, res);
+      }else{
+        return response(res, 'Update Address successfully', results1[0]);
+      }
+    });
+  }
+};
+// try update update address
