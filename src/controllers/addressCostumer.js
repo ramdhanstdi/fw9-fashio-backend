@@ -14,12 +14,13 @@ exports.welcome = (req, res)=>{
 
 exports.createAddressCostumer = (req, res)=>{
   const { id } = req.authUser;
-  const  primary_address = req.body.primary_address;
+  const  {primary_address = false} = req.body;
+  console.log(primary_address);
   const valdation = validationResult(req);
   if(!valdation.isEmpty()){
     return response(res, 'Error occurd', valdation.array(), 400);
   }
-  if (primary_address === false || primary_address === undefined || primary_address === null || primary_address === ''){
+  if (primary_address === 'false' || primary_address === undefined || primary_address === null || primary_address === '' || primary_address === false){
     addressCostumerModel.createAddressNew(id, req.body, (err, results)=>{
       if (err) {
         return errResponse(err, res);
@@ -54,17 +55,21 @@ exports.getAllUserCostumer = (req, res)=>{
 
 exports.updateAddressCostumer = (req, res)=>{
   const { id } = req.authUser;
-  const  primary_address = req.body.primary_address;
-  const valdation = validationResult(req);
-  if(!valdation.isEmpty()){
-    return response(res, 'Error occurd', valdation.array(), 400);
-  }
-  if (primary_address === false || primary_address === undefined || primary_address === null || primary_address === ''){
-    addressCostumerModel.updateAddressNew(id, req.body, (err, results)=>{
+  const id_user = parseInt(req.params.id);
+  const  {primary_address} = req.body;
+  // console.log(typeof id_user);
+  // console.log(typeof id);
+  
+  //const valdation = validationResult(req);
+  // if(!valdation.isEmpty()){
+  //   return response(res, 'Error occurd', valdation.array(), 400);
+  // }
+  if ( primary_address === 'false'  || primary_address === false || primary_address === undefined || primary_address === null || primary_address === ''){
+    addressCostumerModel.updateAddressNew(id, id_user, req.body, (err, results)=>{
       if (err) {
         return errResponse(err, res);
       }else{
-        return response(res, 'Create Address successfully', results[0]);
+        return response(res, 'Update Address successfully', results[0]);
       }
     });
   }else{
@@ -72,7 +77,7 @@ exports.updateAddressCostumer = (req, res)=>{
       if (err) {
         return errResponse(err, res);
       }else{
-        return response(res, 'Create Address successfully', results[0]);
+        return response(res, 'Update Address successfully', results[0]);
       }
     });
   }

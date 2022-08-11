@@ -7,9 +7,9 @@ const addressValidation = [
   body('recepient_phone')
     .isMobilePhone('id-ID')
     .withMessage('Phone number must be indonesian code'),
-  body('postal_code')
-    .toInt()
-    .isNumeric().withMessage('Postal Code must be INT'),
+  // body('postal_code')
+  //   .toInt()
+  //   .isNumeric().withMessage('Postal Code must be INT'),
 ];
 
 addressCostumer.post('/', authMiddle, ...addressValidation, addressCostumerController.createAddressCostumer);
